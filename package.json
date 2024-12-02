@@ -1,7 +1,7 @@
 {
   "name": "nestapi",
   "version": "1.0.0",
-  "description": "API backend service with REST and GrapQL based on Nest.js, TypeORM, Apollo",
+  "description": "Auth service based on Nest.js",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -24,13 +24,10 @@
     "migration:revert": "npm run typeorm migration:revert"
   },
   "dependencies": {
-    "@apollo/server": "^4.7.1",
     "@nestjs-modules/mailer": "^1.9.1",
-    "@nestjs/apollo": "^11.0.5",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.2",
     "@nestjs/core": "^9.0.0",
-    "@nestjs/graphql": "^11.0.5",
     "@nestjs/jwt": "^10.0.3",
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.0.0",
@@ -43,8 +40,6 @@
     "dotenv": "^16.3.1",
     "ejs": "^3.1.10",
     "express-session": "^1.17.3",
-    "graphql": "^16.6.0",
-    "graphql-type-json": "^0.3.2",
     "js-yaml": "^4.1.0",
     "moment": "^2.29.4",
     "mysql2": "^3.6.1",
