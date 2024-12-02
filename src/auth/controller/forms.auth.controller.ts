@@ -40,10 +40,11 @@ export class FormsAuthController {
   @Post('login')
   async login(
     @Body() grantsTokenDto: GrantsTokenDto,
+    @Body('response_type') response_type: string,
     @Req() req: any,
     @Res({ passthrough: true }) res: any,
   ) {
-    return await this.formsAuthService.login(grantsTokenDto, req, res);
+    return await this.formsAuthService.login(grantsTokenDto, response_type, req, res);
   }
 
   @Auth()

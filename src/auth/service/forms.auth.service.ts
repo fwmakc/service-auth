@@ -9,6 +9,7 @@ import { GrantsTokenDto } from '@src/token/dto/grants.token.dto';
 import { GrantsTokenService } from '@src/token/service/grants.token.service';
 import { ConfigService } from '@nestjs/config';
 import { OpenAuthService } from './open.auth.service';
+import { TypeGrants } from '@src/common/common.enum';
 
 @Injectable()
 export class FormsAuthService {
@@ -52,11 +53,12 @@ export class FormsAuthService {
     return await res.redirect(url);
   }
 
-  async login(grantsTokenDto: GrantsTokenDto, req, res): Promise<any> {
+  async login(grantsTokenDto: GrantsTokenDto, response_type: string, req, res): Promise<any> {
     let error = {
       error: 'Unauthorized',
       message: 'Unknown error',
     };
+    grantsTokenDto.grant_type = TypeGrants.PASSWORD;
     const token = await this.grantsTokenService.password(grantsTokenDto, req, res)
       .catch((e) => {
         error = e?.response;
@@ -64,7 +66,14 @@ export class FormsAuthService {
     if (!token) {
       return await this.redirectError(error);
     }
-    return token;
+    if (!response_type) {
+      return token;
+    }
+    const { headers, protocol } = req;
+    const prefix = this.configService.get('PREFIX');
+    const { redirect_uri, client_id } = grantsTokenDto;
+    const url = `/auth?client_id=${client_id}&response_type=${response_type}&redirect_uri=${redirect_uri}`;
+    return await res.redirect(`${protocol}://${headers.host}${prefix}${url}`);
   }
 
   async logout(req, res): Promise<any> {
