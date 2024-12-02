@@ -1,8 +1,6 @@
 import { Args, Query } from '@nestjs/graphql';
 import { Type } from '@nestjs/common';
-import { OptionsDto } from '@src/common/dto/options.dto';
 import { RelationsDto } from '@src/common/dto/relations.dto';
-import { SearchDto } from '@src/common/dto/search.dto';
 import { CommonService } from '@src/common/common.service';
 import { PrivateDto } from '@src/common/dto/private.dto';
 import { PrivateEntity } from '@src/common/entity/private.entity';
@@ -17,24 +15,20 @@ export const PrivateResolver = <T extends Type<unknown>>(
   name: string,
   classEntity: T,
   classDto,
-  classFilter,
   authKey: string = '',
 ) => {
   class BasePrivateResolver<
-    Service extends CommonService<Entity, Dto, Filter>,
+    Service extends CommonService<Entity, Dto>,
     Entity extends PrivateEntity | CommonEntity,
-    Dto extends PrivateDto | CommonDto,
-    Filter
+    Dto extends PrivateDto | CommonDto
   > extends ProtectedResolver(
     name,
     classEntity,
     classDto,
-    classFilter,
   )<
     Service,
     Entity,
-    Dto,
-    Filter
+    Dto
   > {
     readonly service: Service;
 
@@ -113,31 +107,5 @@ export const PrivateResolver = <T extends Type<unknown>>(
       const authId = !authKey ? auth.id : auth[authKey].id;
       return await this.service.find(where, order, relationsDto, authId, authKey);
     }
-
-    @Auth('gql')
-    @Query(() => [classFilter], { name: `${name}Filter` })
-    async filter(
-      @Args('where', { nullable: true, defaultValue: {}, type: () => classDto })
-      dto: Dto,
-      @Args('search', { nullable: true, defaultValue: {}, type: () => SearchDto })
-      searchDto: SearchDto,
-      @Args('options', { nullable: true, defaultValue: {}, type: () => OptionsDto })
-      optionsDto: OptionsDto,
-      @Args('relations', { nullable: true, defaultValue: [], type: () => [RelationsDto] })
-      relationsDto: Array<RelationsDto>,
-      @Self('gql')
-      auth: AuthDto,
-    ): Promise<Filter[]> {
-      const authId = auth.isSuperuser ? undefined : (!authKey ? auth.id : auth[authKey].id);
-      return await this.service.filter(
-        dto,
-        searchDto,
-        optionsDto,
-        relationsDto,
-        authId,
-        authKey,
-      );
-    }
   }
-  return BasePrivateResolver;
 }

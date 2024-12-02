@@ -10,8 +10,6 @@ import { RelationsDto } from '@src/common/dto/relations.dto';
 import { CommonService } from '@src/common/common.service';
 import { PrivateDto } from '@src/common/dto/private.dto';
 import { PrivateEntity } from '@src/common/entity/private.entity';
-import { OptionsDto } from '@src/common/dto/options.dto';
-import { SearchDto } from '@src/common/dto/search.dto';
 import { ProtectedController } from '@src/common/controller/protected.controller';
 import { AuthDto } from '@src/auth/auth.dto';
 import { Auth, Self } from '@src/auth/auth.decorator';
@@ -20,25 +18,21 @@ import { CommonEntity } from '@src/common/common.entity';
 import { CommonDto } from '@src/common/common.dto';
 
 export const PrivateController = <T extends Type<unknown>>(
-  name: string,
   classEntity: T,
   classDto,
   authKey: string = '',
 ) => {
   class BasePrivateController<
-    Service extends CommonService<Entity, Dto, Filter>,
+    Service extends CommonService<Entity, Dto>,
     Entity extends PrivateEntity | CommonEntity,
-    Dto extends PrivateDto | CommonDto,
-    Filter
+    Dto extends PrivateDto | CommonDto
   > extends ProtectedController(
-    name,
     classEntity,
     classDto,
   )<
     Service,
     Entity,
-    Dto,
-    Filter
+    Dto
   > {
     readonly service: Service;
 
@@ -106,30 +100,6 @@ export const PrivateController = <T extends Type<unknown>>(
     ): Promise<Entity[]> {
       const authId = !authKey ? auth.id : auth[authKey].id;
       return await this.service.find(where, order, relationsDto, authId, authKey);
-    }
-
-    @Auth()
-    @Get('filter')
-    async filter(
-      @Data('where') dto: Dto,
-      @Data('search') searchDto: SearchDto,
-      @Data('options') optionsDto: OptionsDto,
-      @Data('relations') relationsDto: Array<RelationsDto>,
-      @Self() auth: AuthDto,
-    ): Promise<Filter[]> {
-      const authId = auth.isSuperuser ? undefined : (!authKey ? auth.id : auth[authKey].id);
-      const result = await this.service.filter(
-        dto,
-        searchDto,
-        optionsDto,
-        relationsDto,
-        authId,
-        authKey,
-      );
-      if (!result) {
-        throw new NotFoundException('Any results not found');
-      }
-      return result;
     }
   }
   return BasePrivateController;

@@ -1,20 +1,11 @@
 import {
-  Body,
   Controller,
   Get,
-  HttpCode,
   NotFoundException,
-  Param,
-  Post,
-  Req,
-  Res,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from '@src/auth/auth.service';
 import { AuthDto } from '@src/auth/auth.dto';
 import { Auth, Self } from '@src/auth/auth.decorator';
-import { Data } from '@src/common/common.decorator';
 
 @Controller('auth')
 export class AuthController {

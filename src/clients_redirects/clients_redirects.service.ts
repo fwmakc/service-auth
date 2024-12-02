@@ -8,8 +8,7 @@ import { CommonService } from '@src/common/common.service';
 @Injectable()
 export class ClientsRedirectsService extends CommonService<
   ClientsRedirectsEntity,
-  ClientsRedirectsDto,
-  null
+  ClientsRedirectsDto
 > {
   constructor(
     @InjectRepository(ClientsRedirectsEntity)

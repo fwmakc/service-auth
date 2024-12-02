@@ -7,7 +7,6 @@ import {
 import { Repository } from 'typeorm';
 import { AuthDto } from '@src/auth/auth.dto';
 import { AuthEntity } from '@src/auth/auth.entity';
-import { AuthFilter } from '@src/auth/auth.filter';
 import { CommonService } from '@src/common/common.service';
 import { RelationsDto } from '@src/common/dto/relations.dto';
 import { compare } from 'bcryptjs';
@@ -15,8 +14,7 @@ import { compare } from 'bcryptjs';
 @Injectable()
 export class AuthService extends CommonService<
   AuthEntity,
-  AuthDto,
-  AuthFilter
+  AuthDto
 > {
   constructor(
     @InjectRepository(AuthEntity)

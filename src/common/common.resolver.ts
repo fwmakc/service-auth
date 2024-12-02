@@ -1,8 +1,6 @@
 import { Args, Mutation, Query } from '@nestjs/graphql';
 import { Type } from '@nestjs/common';
-import { OptionsDto } from '@src/common/dto/options.dto';
 import { RelationsDto } from '@src/common/dto/relations.dto';
-import { SearchDto } from '@src/common/dto/search.dto';
 import { CommonService } from '@src/common/common.service';
 import { CommonDto } from '@src/common/common.dto';
 import { CommonEntity } from '@src/common/common.entity';
@@ -13,13 +11,11 @@ export const CommonResolver = <T extends Type<unknown>>(
   name: string,
   classEntity: T,
   classDto,
-  classFilter,
 ) => {
   class BaseResolver<
-    Service extends CommonService<Entity, Dto, Filter>,
+    Service extends CommonService<Entity, Dto>,
     Entity extends CommonEntity,
-    Dto extends CommonDto,
-    Filter
+    Dto extends CommonDto
   > {
     readonly service: Service;
 
@@ -69,26 +65,6 @@ export const CommonResolver = <T extends Type<unknown>>(
       auth: AuthDto = undefined,
     ): Promise<Entity[]> {
       return await this.service.many(ids, relationsDto);
-    }
-
-    @Query(() => [classFilter], { name: `${name}Filter` })
-    async filter(
-      @Args('where', { nullable: true, defaultValue: {}, type: () => classDto })
-      dto: Dto,
-      @Args('search', { nullable: true, defaultValue: {}, type: () => SearchDto })
-      searchDto: SearchDto,
-      @Args('options', { nullable: true, defaultValue: {}, type: () => OptionsDto })
-      optionsDto: OptionsDto,
-      @Args('relations', { nullable: true, defaultValue: [], type: () => [RelationsDto] })
-      relationsDto: Array<RelationsDto>,
-      auth: AuthDto = undefined,
-    ): Promise<Filter[]> {
-      return await this.service.filter(
-        dto,
-        searchDto,
-        optionsDto,
-        relationsDto,
-      );
     }
 
     @Mutation(() => classEntity, { name: `${name}Create` })

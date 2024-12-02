@@ -1,7 +1,6 @@
 import { Resolver } from '@nestjs/graphql';
 import { ClientsDto } from '@src/clients/clients.dto';
 import { ClientsEntity } from '@src/clients/clients.entity';
-import { ClientsFilter } from '@src/clients/clients.filter';
 import { ClientsService } from '@src/clients/clients.service';
 import { ProtectedResolver } from '@src/common/resolver/protected.resolver';
 
@@ -9,13 +8,11 @@ import { ProtectedResolver } from '@src/common/resolver/protected.resolver';
 export class ClientsResolver extends ProtectedResolver(
   'clients',
   ClientsEntity,
-  ClientsDto,
-  ClientsFilter,
+  ClientsDto
 )<
   ClientsService,
   ClientsEntity,
-  ClientsDto,
-  ClientsFilter
+  ClientsDto
 > {
   constructor(
     readonly service: ClientsService,

@@ -14,24 +14,20 @@ export const ProtectedResolver = <T extends Type<unknown>>(
   name: string,
   classEntity: T,
   classDto,
-  classFilter,
   authKey: string = '',
 ) => {
   class BaseProtectedResolver<
-    Service extends CommonService<Entity, Dto, Filter>,
+    Service extends CommonService<Entity, Dto>,
     Entity extends ProtectedEntity | CommonEntity,
-    Dto extends ProtectedDto | CommonDto,
-    Filter
+    Dto extends ProtectedDto | CommonDto
   > extends CommonResolver(
     name,
     classEntity,
     classDto,
-    classFilter,
   )<
     Service,
     Entity,
-    Dto,
-    Filter
+    Dto
   > {
     readonly service: Service;
 

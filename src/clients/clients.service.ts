@@ -5,7 +5,6 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClientsDto } from '@src/clients/clients.dto';
 import { ClientsEntity } from '@src/clients/clients.entity';
-import { ClientsFilter } from '@src/clients/clients.filter';
 import { RelationsDto } from '@src/common/dto/relations.dto';
 import { ClientsRedirectsService } from '@src/clients_redirects/clients_redirects.service';
 import { TokenService } from '@src/token/token.service';
@@ -14,10 +13,8 @@ import { CommonService } from '@src/common/common.service';
 @Injectable()
 export class ClientsService extends CommonService<
   ClientsEntity,
-  ClientsDto,
-  ClientsFilter
+  ClientsDto
 > {
-  
   constructor(
     @InjectRepository(ClientsEntity)
     protected readonly repository: Repository<ClientsEntity>,

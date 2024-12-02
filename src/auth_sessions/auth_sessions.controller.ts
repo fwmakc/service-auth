@@ -5,18 +5,15 @@ import { CommonController } from '@src/common/common.controller';
 import { AuthSessionsDto } from '@src/auth_sessions/auth_sessions.dto';
 import { AuthSessionsService } from '@src/auth_sessions/auth_sessions.service';
 import { AuthSessionsEntity } from '@src/auth_sessions/auth_sessions.entity';
-import { AuthSessionsFilter } from '@src/auth_sessions/auth_sessions.filter';
 
 @Controller('auth/sessions')
 export class AuthSessionsController extends CommonController(
-  'Сессии',
   AuthSessionsEntity,
   AuthSessionsDto,
 )<
   AuthSessionsService,
   AuthSessionsEntity,
-  AuthSessionsDto,
-  AuthSessionsFilter
+  AuthSessionsDto
 > {
   constructor(
     readonly service: AuthSessionsService,

@@ -19,25 +19,21 @@ import { CommonEntity } from '@src/common/common.entity';
 import { CommonDto } from '@src/common/common.dto';
 
 export const ProtectedController = <T extends Type<unknown>>(
-  name: string,
   classEntity: T,
   classDto,
   authKey: string = '',
 ) => {
   class BaseProtectedController<
-    Service extends CommonService<Entity, Dto, Filter>,
+    Service extends CommonService<Entity, Dto>,
     Entity extends ProtectedEntity | CommonEntity,
-    Dto extends ProtectedDto | CommonDto,
-    Filter
+    Dto extends ProtectedDto | CommonDto
   > extends CommonController(
-    name,
     classEntity,
     classDto,
   )<
     Service,
     Entity,
-    Dto,
-    Filter
+    Dto
   > {
     readonly service: Service;
 

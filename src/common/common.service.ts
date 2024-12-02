@@ -1,19 +1,12 @@
 import { BadRequestException } from '@nestjs/common';
 import { DeepPartial, FindOptionsOrder, FindOptionsWhere, In, Repository } from 'typeorm';
-import { OptionsDto } from '@src/common/dto/options.dto';
 import { RelationsDto } from '@src/common/dto/relations.dto';
-import { SearchDto } from '@src/common/dto/search.dto';
-import { entityGetParams } from '@src/common/service/entity.service';
-import { relationsCreate } from '@src/common/service/relations.service';
-import { filterService } from '@src/common/service/filter.service';
-import { optionsService } from '@src/common/service/options.service';
 import { CommonDto } from '@src/common/common.dto';
 import { CommonEntity } from '@src/common/common.entity';
 
 export class CommonService<
   Entity extends CommonEntity,
-  Dto extends CommonDto,
-  Filter
+  Dto extends CommonDto
 > {
   protected readonly repository: Repository<Entity>;
 
@@ -135,56 +128,6 @@ export class CommonService<
         relations: relationsDto?.map(i => i.name),
         where,
       });
-    }
-    catch (e) {
-      this.error(e);
-    }
-  }
-
-  async filter(
-    dto: Dto,
-    searchDto: SearchDto,
-    optionsDto: OptionsDto,
-    relationsDto: Array<RelationsDto> = undefined,
-    authId: number = undefined,
-    authKey: string = '',
-  ): Promise<Filter[]> {
-    if (relationsDto.length) {
-      relationsDto = relationsDto.map(i => {
-        if (i.order === undefined) {
-          i.order = 'id';
-        }
-        if (i.desc === undefined) {
-          i.desc = false;
-        }
-        return i;
-      });
-    }
-
-    if (authId !== undefined) {
-      const auth = { id: authId };
-      dto = { ...dto };
-      dto[authKey || 'auth'] = auth;
-      if (!relationsDto) {
-        relationsDto = [];
-      }
-      relationsDto.push({ name: 'auth', order: 'id', desc: false });
-    }
-
-    const { root, core, fields } = entityGetParams(this.repository.target);
-    const query = this.repository.createQueryBuilder(root);
-    const where = filterService(
-      dto,
-      searchDto,
-      root,
-      core,
-      fields,
-    );
-    query.where(where);
-    relationsCreate(query, relationsDto, root);
-
-    try {
-      return await optionsService(query, optionsDto, relationsDto, root);
     }
     catch (e) {
       this.error(e);

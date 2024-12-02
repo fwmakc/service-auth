@@ -3,7 +3,6 @@ import { CommonResolver } from '@src/common/common.resolver';
 import { AuthSessionsDto } from '@src/auth_sessions/auth_sessions.dto';
 import { AuthSessionsEntity } from '@src/auth_sessions/auth_sessions.entity';
 import { AuthSessionsService } from '@src/auth_sessions/auth_sessions.service';
-import { AuthSessionsFilter } from '@src/auth_sessions/auth_sessions.filter';
 import { RelationsDto } from '@src/common/dto/relations.dto';
 
 @Resolver(AuthSessionsEntity)
@@ -11,12 +10,10 @@ export class AuthSessionsResolver extends CommonResolver(
   'authSessions',
   AuthSessionsEntity,
   AuthSessionsDto,
-  AuthSessionsFilter,
 )<
   AuthSessionsService,
   AuthSessionsEntity,
-  AuthSessionsDto,
-  AuthSessionsFilter
+  AuthSessionsDto
 > {
   constructor(
     readonly service: AuthSessionsService,

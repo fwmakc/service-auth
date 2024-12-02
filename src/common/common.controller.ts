@@ -10,9 +10,7 @@ import {
   Patch,
   Type,
 } from '@nestjs/common';
-import { OptionsDto } from '@src/common/dto/options.dto';
 import { RelationsDto } from '@src/common/dto/relations.dto';
-import { SearchDto } from '@src/common/dto/search.dto';
 import { Data } from '@src/common/common.decorator';
 import { CommonService } from '@src/common/common.service';
 import { CommonDto } from '@src/common/common.dto';
@@ -20,15 +18,13 @@ import { CommonEntity } from '@src/common/common.entity';
 import { AuthDto } from '@src/auth/auth.dto';
 
 export const CommonController = <T extends Type<unknown>>(
-  name: string,
   classEntity: T,
   classDto,
 ) => {
   class BaseController<
-    Service extends CommonService<Entity, Dto, Filter>,
+    Service extends CommonService<Entity, Dto>,
     Entity extends CommonEntity,
-    Dto extends CommonDto,
-    Filter
+    Dto extends CommonDto
   > {
     readonly service: Service;
 
@@ -74,26 +70,6 @@ export const CommonController = <T extends Type<unknown>>(
       const result = await this.service.many(ids, relationsDto);
       if (!result) {
         throw new NotFoundException('Entry not found');
-      }
-      return result;
-    }
-
-    @Get('filter')
-    async filter(
-      @Data('where') dto: Dto,
-      @Data('search') searchDto: SearchDto,
-      @Data('options') optionsDto: OptionsDto,
-      @Data('relations') relationsDto: Array<RelationsDto>,
-      auth: AuthDto = undefined,
-    ): Promise<Filter[]> {
-      const result = await this.service.filter(
-        dto,
-        searchDto,
-        optionsDto,
-        relationsDto,
-      );
-      if (!result) {
-        throw new NotFoundException('Any results not found');
       }
       return result;
     }

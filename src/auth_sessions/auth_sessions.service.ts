@@ -5,13 +5,11 @@ import { RelationsDto } from '@src/common/dto/relations.dto';
 import { CommonService } from '@src/common/common.service';
 import { AuthSessionsDto } from '@src/auth_sessions/auth_sessions.dto';
 import { AuthSessionsEntity } from '@src/auth_sessions/auth_sessions.entity';
-import { AuthSessionsFilter } from '@src/auth_sessions/auth_sessions.filter';
 
 @Injectable()
 export class AuthSessionsService extends CommonService<
   AuthSessionsEntity,
-  AuthSessionsDto,
-  AuthSessionsFilter
+  AuthSessionsDto
 > {
   constructor(
     @InjectRepository(AuthSessionsEntity)

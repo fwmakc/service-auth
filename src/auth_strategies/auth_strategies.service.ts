@@ -10,8 +10,7 @@ import { encrypt, decrypt } from '@src/common/service/crypt.service';
 @Injectable()
 export class AuthStrategiesService extends CommonService<
   AuthStrategiesEntity,
-  AuthStrategiesDto,
-  null
+  AuthStrategiesDto
 > {
   constructor(
     @InjectRepository(AuthStrategiesEntity)

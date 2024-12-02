@@ -4,18 +4,15 @@ import { ClientsDto } from '@src/clients/clients.dto';
 import { Client, SelfClient } from '@src/clients/clients.decorator';
 import { PrivateController } from '@src/common/controller/private.controller';
 import { ClientsEntity } from '@src/clients/clients.entity';
-import { ClientsFilter } from '@src/clients/clients.filter';
 
 @Controller('clients')
 export class ClientsController extends PrivateController(
-  'Клиентские приложения',
   ClientsEntity,
-  ClientsDto,
+  ClientsDto
 )<
   ClientsService,
   ClientsEntity,
-  ClientsDto,
-  ClientsFilter
+  ClientsDto
 > {
   constructor(
     readonly service: ClientsService,
