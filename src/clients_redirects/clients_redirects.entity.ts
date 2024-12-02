@@ -1,4 +1,3 @@
-import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Entity,
   Column,
@@ -8,10 +7,8 @@ import {
 import { CommonEntity } from '@src/common/common.entity';
 import { ClientsEntity } from '@src/clients/clients.entity';
 
-@ObjectType()
 @Entity({ name: 'clients_redirects' })
 export class ClientsRedirectsEntity extends CommonEntity {
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 2048,
@@ -19,7 +16,6 @@ export class ClientsRedirectsEntity extends CommonEntity {
   })
   uri: string;
 
-  @Field(() => ClientsEntity, { nullable: true })
   @ManyToOne(() => ClientsEntity, (client) => client.redirects, {
     cascade: true,
     onDelete: 'CASCADE',

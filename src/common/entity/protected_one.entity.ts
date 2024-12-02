@@ -1,4 +1,3 @@
-import { ObjectType } from '@nestjs/graphql';
 import {
   Entity,
   JoinColumn,
@@ -7,7 +6,6 @@ import {
 import { CommonEntity } from '@src/common/common.entity';
 import { AuthEntity } from '@src/auth/auth.entity';
 
-@ObjectType()
 @Entity()
 export class ProtectedOneEntity extends CommonEntity {
   @OneToOne(() => AuthEntity)

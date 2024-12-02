@@ -1,4 +1,3 @@
-import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Entity,
   Column,
@@ -9,11 +8,9 @@ import {
 import { CommonEntity } from '@src/common/common.entity';
 import { AuthEntity } from '@src/auth/auth.entity';
 
-@ObjectType()
 @Entity({ name: 'auth_strategies' })
 @Index(['name', 'uid'], { unique: true })
 export class AuthStrategiesEntity extends CommonEntity {
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 200,
@@ -21,7 +18,6 @@ export class AuthStrategiesEntity extends CommonEntity {
   })
   name: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 200,
@@ -29,14 +25,12 @@ export class AuthStrategiesEntity extends CommonEntity {
   })
   uid: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'json',
     nullable: true,
   })
   json?: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'text',
     name: 'access_token',
@@ -44,7 +38,6 @@ export class AuthStrategiesEntity extends CommonEntity {
   })
   accessToken?: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'text',
     name: 'refresh_token',

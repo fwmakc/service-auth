@@ -1,18 +1,14 @@
-import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Entity,
   Column,
   OneToMany,
-  // Generated,
 } from 'typeorm';
 import { ProtectedEntity } from '@src/common/entity/protected.entity';
 import { TypeClients } from '@src/common/common.enum';
 import { ClientsRedirectsEntity } from '@src/clients_redirects/clients_redirects.entity';
 
-@ObjectType()
 @Entity({ name: 'clients' })
 export class ClientsEntity extends ProtectedEntity {
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 64,
@@ -21,7 +17,6 @@ export class ClientsEntity extends ProtectedEntity {
   })
   client_id: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 1024,
@@ -29,7 +24,6 @@ export class ClientsEntity extends ProtectedEntity {
   })
   client_secret: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 1024,
@@ -37,10 +31,6 @@ export class ClientsEntity extends ProtectedEntity {
   })
   client_password: string;
 
-  @Field(() => TypeClients, {
-    nullable: true,
-    defaultValue: TypeClients.DEFAULT,
-  })
   @Column({
     type: 'enum',
     enum: TypeClients,
@@ -49,7 +39,6 @@ export class ClientsEntity extends ProtectedEntity {
   })
   client_type?: TypeClients;
 
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 200,
@@ -57,14 +46,12 @@ export class ClientsEntity extends ProtectedEntity {
   })
   title: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'text',
     nullable: true,
   })
   description: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 2048,
@@ -72,7 +59,6 @@ export class ClientsEntity extends ProtectedEntity {
   })
   client_uri: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 2048,
@@ -80,7 +66,6 @@ export class ClientsEntity extends ProtectedEntity {
   })
   code: string;
 
-  @Field({ defaultValue: () => 'CURRENT_TIMESTAMP', nullable: true })
   @Column({
     type: 'timestamp',
     nullable: true,
@@ -89,7 +74,6 @@ export class ClientsEntity extends ProtectedEntity {
   })
   publishedAt: Date;
 
-  @Field({ defaultValue: true, nullable: true })
   @Column({
     type: 'boolean',
     nullable: true,
@@ -98,7 +82,6 @@ export class ClientsEntity extends ProtectedEntity {
   })
   isPublished: boolean;
 
-  @Field(() => [ClientsRedirectsEntity], { nullable: true })
   @OneToMany(() => ClientsRedirectsEntity, (redirect) => redirect.client, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',

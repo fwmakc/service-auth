@@ -1,12 +1,9 @@
-import { Field, ObjectType } from '@nestjs/graphql';
 import { Entity, Column, JoinColumn, ManyToOne } from 'typeorm';
 import { CommonEntity } from '@src/common/common.entity';
 import { AuthEntity } from '@src/auth/auth.entity';
 
-@ObjectType()
 @Entity({ name: 'auth_sessions' })
 export class AuthSessionsEntity extends CommonEntity {
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 128,
@@ -14,7 +11,6 @@ export class AuthSessionsEntity extends CommonEntity {
   })
   description?: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 64,
@@ -22,7 +18,6 @@ export class AuthSessionsEntity extends CommonEntity {
   })
   ip?: string;
 
-  @Field({ nullable: true })
   @Column({
     name: 'user_agent',
     type: 'varchar',
@@ -31,7 +26,6 @@ export class AuthSessionsEntity extends CommonEntity {
   })
   userAgent?: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 512,
@@ -39,7 +33,6 @@ export class AuthSessionsEntity extends CommonEntity {
   })
   referrer?: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 8,
@@ -47,7 +40,6 @@ export class AuthSessionsEntity extends CommonEntity {
   })
   method?: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 8,
@@ -55,7 +47,6 @@ export class AuthSessionsEntity extends CommonEntity {
   })
   locale?: string;
 
-  @Field({ nullable: true })
   @Column({
     type: 'varchar',
     length: 32,

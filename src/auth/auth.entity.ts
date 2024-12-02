@@ -1,15 +1,12 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { Entity, Column, OneToMany, OneToOne } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { CommonEntity } from '@src/common/common.entity';
 import { AuthConfirmEntity } from '@src/auth_confirm/auth_confirm.entity';
 import { AuthSessionsEntity } from '@src/auth_sessions/auth_sessions.entity';
 import { AuthStrategiesEntity } from '@src/auth_strategies/auth_strategies.entity';
 import { ClientsEntity } from '@src/clients/clients.entity';
 
-@ObjectType()
 @Entity({ name: 'auth' })
 export class AuthEntity extends CommonEntity {
-  @Field()
   @Column({
     type: 'varchar',
     length: 200,
@@ -17,15 +14,12 @@ export class AuthEntity extends CommonEntity {
   })
   username: string;
 
-  @Field({ nullable: true })
   @Column({ nullable: true })
   password: string;
 
-  @Field({ defaultValue: false })
   @Column({ default: false, name: 'is_activated' })
   isActivated: boolean;
 
-  @Field({ defaultValue: false })
   @Column({ default: false, name: 'is_superuser' })
   isSuperuser: boolean;
 
