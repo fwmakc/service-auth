@@ -23,7 +23,7 @@ export class AuthStrategy extends PassportStrategy(Strategy) {
     if (!type || type !== 'access') {
       throw new UnauthorizedException('Invalid token or expired!');
     }
-    const auth = await this.authService.findOne(id, [{ name: 'users' }]);
+    const auth = await this.authService.findOne(id);
     if (!auth.id || !auth.isActivated) {
       throw new ForbiddenException('You have no rights!');
     }

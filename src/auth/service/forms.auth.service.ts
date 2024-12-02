@@ -4,36 +4,39 @@ import { ConfirmAuthHandler } from '@src/auth/handler/confirm.auth.handler';
 import { LogoutAuthHandler } from '@src/auth/handler/logout.auth.handler';
 import { RegisterAuthHandler } from '@src/auth/handler/register.auth.handler';
 import { ResetAuthHandler } from '@src/auth/handler/reset.auth.handler';
-import { redirect, query } from '@src/auth/helpers/forms.auth.helpers';
 import { AuthDto } from '@src/auth/auth.dto';
 import { GrantsTokenDto } from '@src/token/dto/grants.token.dto';
 import { GrantsTokenService } from '@src/token/service/grants.token.service';
+import { ConfigService } from '@nestjs/config';
+import { OpenAuthService } from './open.auth.service';
 
 @Injectable()
 export class FormsAuthService {
   constructor(
+    private readonly configService: ConfigService,
     protected readonly changeAuthHandler: ChangeAuthHandler,
     protected readonly confirmAuthHandler: ConfirmAuthHandler,
     protected readonly logoutAuthHandler: LogoutAuthHandler,
     protected readonly registerAuthHandler: RegisterAuthHandler,
     protected readonly resetAuthHandler: ResetAuthHandler,
     protected readonly grantsTokenService: GrantsTokenService,
+    protected readonly openAuthService: OpenAuthService,
   ) {}
 
-  async change(authDto: AuthDto, code: string, req, res): Promise<void> {
+  async change(authDto: AuthDto, code: string, req, res): Promise<any> {
     let error;
     const result = await this.changeAuthHandler.change(authDto, code)
       .catch((e) => {
         error = e?.response;
       });
     if (!result) {
-      return await redirect(req, res, error);
+      return await this.redirectError(error);
     }
-    const uri = '/auth/change_complete.html';
-    return await query(req, res, uri);
+    const url = this.configService.get('FORM_CHANGE_COMPLETE');
+    return await res.redirect(url);
   }
 
-  async confirm(code: string, req, res): Promise<void> {
+  async confirm(code: string, req, res): Promise<any> {
     let error = {
       error: 'Bad request',
       message: 'Invalid confirm code',
@@ -43,43 +46,38 @@ export class FormsAuthService {
         error = e?.response;
       });
     if (!result) {
-      return await redirect(req, res, error);
+      return await this.redirectError(error);
     }
-    const uri = '/auth/confirm_complete.html';
-    return await query(req, res, uri);
+    const url = this.configService.get('FORM_CONFIRM_COMPLETE');
+    return await res.redirect(url);
   }
 
-  async login(grantsTokenDto: GrantsTokenDto, response_type: string, req, res): Promise<void> {
+  async login(grantsTokenDto: GrantsTokenDto, req, res): Promise<any> {
     let error = {
       error: 'Unauthorized',
       message: 'Unknown error',
     };
-    const { redirect_uri, client_id } = grantsTokenDto;
     const token = await this.grantsTokenService.password(grantsTokenDto, req, res)
       .catch((e) => {
         error = e?.response;
       });
     if (!token) {
-      return await redirect(req, res, error);
+      return await this.redirectError(error);
     }
-    if (!redirect_uri || !client_id || !response_type) {
-      return token;
-    }
-    const uri = `/auth?client_id=${client_id}&response_type=${response_type}&redirect_uri=${redirect_uri}`;
-    return await query(req, res, uri);
+    return token;
   }
 
-  async logout(req, res): Promise<void> {
+  async logout(req, res): Promise<any> {
     let error;
     const result = await this.logoutAuthHandler.logout(req)
       .catch((e) => {
         error = e?.response;
       });
     if (!result) {
-      return;
+      return await this.redirectError(error);
     }
-    const uri = '/auth/auth.html';
-    return await query(req, res, uri);
+    const url = this.configService.get('FORM_LOGIN');
+    return await res.redirect(url);
   }
 
   async register(authDto: AuthDto, subject: string, req, res): Promise<any> {
@@ -89,11 +87,11 @@ export class FormsAuthService {
         error = e?.response;
       });
     if (!auth) {
-      return await redirect(req, res, error);
+      return await this.redirectError(error);
     }
     await this.registerAuthHandler.sendMail(auth, subject);
-    const uri = '/auth/register_complete.html';
-    return await query(req, res, uri);
+    const url = this.configService.get('FORM_REGISTER_COMPLETE');
+    return await res.redirect(url);
   }
 
   async reset(authDto: AuthDto, subject: string, req, res): Promise<any> {
@@ -103,10 +101,27 @@ export class FormsAuthService {
         error = e?.response;
       });
     if (!confirm?.code) {
-      return await redirect(req, res, error);
+      return await this.redirectError(error);
     }
     await this.resetAuthHandler.sendMail(authDto.username, subject, confirm.code);
-    const uri = '/auth/reset_complete.html';
-    return await query(req, res, uri);
+    const url = this.configService.get('FORM_RESET_COMPLETE');
+    return await res.redirect(url);
+  }
+
+  async redirectError(error = undefined) {
+    if (!error) {
+      error = {
+        error: 'Bad request',
+        message: 'Unknown error',
+      };
+    }
+
+    const errorArray = [];
+    for (const [key, value] of Object.entries({ ...error })) {
+      errorArray.push(`${key}=${ encodeURI(`${value}`) }`);
+    }
+
+    const url = this.configService.get('FORM_LOGIN');
+    return `${url}?${errorArray.join('&')}`;
   }
 }

@@ -16,7 +16,6 @@ import { UntiGuard } from '@src/auth_strategies/guard/unti.guard';
 import { UntiProvider } from '@src/auth_strategies/provider/unti.provider';
 import { AuthSessionsService } from '@src/auth_sessions/auth_sessions.service';
 import { TokenService } from '@src/token/token.service';
-import { ApiTags } from '@nestjs/swagger';
 import { AuthStrategiesService } from '@src/auth_strategies/auth_strategies.service';
 import { AuthDto } from '@src/auth/auth.dto';
 import { Auth, Self } from '@src/auth/auth.decorator';
@@ -24,7 +23,6 @@ import { OauthProvider } from '@src/auth_strategies/provider/oauth.provider';
 import { OpenAuthService } from '@src/auth/service/open.auth.service';
 import { Cookie } from '@src/common/service/cookie.service';
 
-@ApiTags('Стратегии авторизации')
 @Controller('auth/strategies')
 export class AuthStrategiesController {
   constructor(

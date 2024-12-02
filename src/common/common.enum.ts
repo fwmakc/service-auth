@@ -41,5 +41,4 @@ export enum TypeGrants {
   REFRESH_TOKEN = 'refresh_token',
   AUTHORIZATION_CODE = 'authorization_code',
   CLIENT_CREDENTIALS = 'client_credentials',
-  PERSON_CREDENTIALS = 'person_credentials',
 }

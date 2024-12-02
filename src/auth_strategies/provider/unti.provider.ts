@@ -4,7 +4,6 @@ import { AuthDto } from '@src/auth/auth.dto';
 import { AuthService } from '@src/auth/auth.service';
 import { AuthStrategiesService } from '@src/auth_strategies/auth_strategies.service';
 import { ConfigService } from '@nestjs/config';
-import { UsersService } from '@src/users/users.service';
 
 @Injectable()
 export class UntiProvider {
@@ -12,7 +11,6 @@ export class UntiProvider {
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
     private readonly strategiesService: AuthStrategiesService,
-    private readonly userService: UsersService,
   ) {}
 
   async activate(request): Promise<any> {
@@ -97,19 +95,6 @@ export class UntiProvider {
       accessToken: account.accessToken,
       refreshToken: account.refreshToken,
     });
-
-    const user = await this.userService.first(null, null, null, auth.id);
-    await this.userService.update(
-      user.id,
-      {
-        email: account.email,
-        name: account.firstname,
-        lastName: account.lastname,
-        parentName: account.secondname,
-      },
-      null,
-      auth.id,
-    );
 
     return auth;
   }

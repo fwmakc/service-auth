@@ -15,7 +15,6 @@ import { ProtectedEntity } from '@src/common/entity/protected.entity';
 import { CommonController } from '@src/common/common.controller';
 import { AuthDto } from '@src/auth/auth.dto';
 import { Auth, Self } from '@src/auth/auth.decorator';
-import { Doc } from '@src/common/common.decorator';
 import { CommonEntity } from '@src/common/common.entity';
 import { CommonDto } from '@src/common/common.dto';
 
@@ -44,7 +43,6 @@ export const ProtectedController = <T extends Type<unknown>>(
 
     @Auth()
     @Post('create')
-    @Doc('create', classDto)
     async create(
       @Body('create') dto: Dto,
       @Body('relations') relationsDto: Array<RelationsDto>,
@@ -56,7 +54,6 @@ export const ProtectedController = <T extends Type<unknown>>(
 
     @Auth()
     @Patch('update/:id')
-    @Doc('update', classDto)
     async update(
       @Param('id', ParseIntPipe) id: number,
       @Body('update') dto: Dto,
@@ -73,7 +70,6 @@ export const ProtectedController = <T extends Type<unknown>>(
 
     @Auth()
     @Delete('remove/:id')
-    @Doc('remove', undefined)
     async remove(
       @Param('id', ParseIntPipe) id: number,
       @Self() auth: AuthDto,

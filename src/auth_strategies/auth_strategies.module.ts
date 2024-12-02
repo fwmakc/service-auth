@@ -7,7 +7,6 @@ import { AuthStrategiesService } from '@src/auth_strategies/auth_strategies.serv
 import { AuthStrategiesController } from '@src/auth_strategies/auth_strategies.controller';
 import { TokenModule } from '@src/token/token.module';
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from '@src/users/users.module';
 import { SessionSerializer } from '@src/auth_strategies/serializer/session.serializer';
 import { GoogleStrategy } from '@src/auth_strategies/strategy/google.strategy';
 import { LeaderStrategy } from '@src/auth_strategies/strategy/leader.strategy';
@@ -24,7 +23,6 @@ import { OauthProvider } from '@src/auth_strategies/provider/oauth.provider';
     forwardRef(() => AuthModule),
     forwardRef(() => AuthSessionsModule),
     forwardRef(() => TokenModule),
-    forwardRef(() => UsersModule),
     ConfigModule,
   ],
   providers: [

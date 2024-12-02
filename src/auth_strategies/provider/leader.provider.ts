@@ -4,7 +4,6 @@ import { AuthDto } from '@src/auth/auth.dto';
 import { AuthService } from '@src/auth/auth.service';
 import { AuthStrategiesService } from '@src/auth_strategies/auth_strategies.service';
 import { ConfigService } from '@nestjs/config';
-import { UsersService } from '@src/users/users.service';
 
 @Injectable()
 export class LeaderProvider {
@@ -12,7 +11,6 @@ export class LeaderProvider {
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
     private readonly strategiesService: AuthStrategiesService,
-    private readonly userService: UsersService,
   ) {}
 
   async activate(request): Promise<any> {
@@ -91,34 +89,6 @@ export class LeaderProvider {
       accessToken: account.accessToken,
       refreshToken: account.refreshToken,
     });
-
-    const genders = {
-      male: 'm',
-      female: 'w',
-    };
-    const fields = [ 'postCode', 'country', 'region', 'city', 'street', 'house', 'building', 'wing', 'apartment', 'place' ];
-    const address = fields.filter(i => {
-      const r = account.address?.[i];
-      return !!r ? r : undefined;
-    }).join(', ');
-    const user = await this.userService.first(null, null, null, auth.id);
-    await this.userService.update(
-      user.id,
-      {
-        email: account.email,
-        phone: `7${account.phone}`,
-        name: account.firstName,
-        lastName: account.lastName,
-        parentName: account.fatherName,
-        avatar: account.photo,
-        birthday: account.birthday,
-        address,
-        timezone: account.address?.timezone,
-        gender: genders[account.gender] || '',
-      },
-      null,
-      auth.id,
-    );
 
     return auth;
   }

@@ -13,11 +13,10 @@ import {
 import { OptionsDto } from '@src/common/dto/options.dto';
 import { RelationsDto } from '@src/common/dto/relations.dto';
 import { SearchDto } from '@src/common/dto/search.dto';
-import { Data, Doc } from '@src/common/common.decorator';
+import { Data } from '@src/common/common.decorator';
 import { CommonService } from '@src/common/common.service';
 import { CommonDto } from '@src/common/common.dto';
 import { CommonEntity } from '@src/common/common.entity';
-import { ApiTags } from '@nestjs/swagger';
 import { AuthDto } from '@src/auth/auth.dto';
 
 export const CommonController = <T extends Type<unknown>>(
@@ -25,7 +24,6 @@ export const CommonController = <T extends Type<unknown>>(
   classEntity: T,
   classDto,
 ) => {
-  @ApiTags(name)
   class BaseController<
     Service extends CommonService<Entity, Dto, Filter>,
     Entity extends CommonEntity,
@@ -35,7 +33,6 @@ export const CommonController = <T extends Type<unknown>>(
     readonly service: Service;
 
     @Get('find')
-    @Doc('find', classDto)
     async find(
       @Data('where') where: object,
       @Data('order') order: object,
@@ -46,7 +43,6 @@ export const CommonController = <T extends Type<unknown>>(
     }
 
     @Get('find/:id')
-    @Doc('findOne', classDto)
     async findOne(
       @Param('id', ParseIntPipe) id: number,
       @Data('relations') relationsDto: Array<RelationsDto>,
@@ -60,7 +56,6 @@ export const CommonController = <T extends Type<unknown>>(
     }
 
     @Get('first')
-    @Doc('first', classDto)
     async first(
       @Data('where') where: Object,
       @Data('order') order: object,
@@ -71,7 +66,6 @@ export const CommonController = <T extends Type<unknown>>(
     }
 
     @Get('many/:ids')
-    @Doc('many', classDto)
     async many(
       @Param('ids', new ParseArrayPipe({ items: Number, separator: ',' })) ids: Array<number>,
       @Data('relations') relationsDto: Array<RelationsDto>,
@@ -85,7 +79,6 @@ export const CommonController = <T extends Type<unknown>>(
     }
 
     @Get('filter')
-    @Doc('filter', classDto)
     async filter(
       @Data('where') dto: Dto,
       @Data('search') searchDto: SearchDto,
@@ -106,7 +99,6 @@ export const CommonController = <T extends Type<unknown>>(
     }
 
     @Post('create')
-    @Doc('create', classDto)
     async create(
       @Body('create') dto: Dto,
       @Body('relations') relationsDto: Array<RelationsDto>,
@@ -116,7 +108,6 @@ export const CommonController = <T extends Type<unknown>>(
     }
 
     @Patch('update/:id')
-    @Doc('update', classDto)
     async update(
       @Param('id', ParseIntPipe) id: number,
       @Body('update') dto: Dto,
@@ -131,7 +122,6 @@ export const CommonController = <T extends Type<unknown>>(
     }
 
     @Delete('remove/:id')
-    @Doc('remove', undefined)
     async remove(
       @Param('id', ParseIntPipe) id: number,
       auth: AuthDto = undefined,

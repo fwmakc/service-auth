@@ -38,7 +38,7 @@ export class RegisterAuthHandler {
     // закомментируйте строки ниже, если пользователь будет сразу же активирован
     // используйте generate чтобы генерировать код из цифр
     const confirm = await this.authConfirmService.create(auth);
-    const prefix = this.configService.get('PREFIX');
+    const url = this.configService.get('FORM_CONFIRM');
 
     await this.mailService.sendTemplate(
       {
@@ -47,10 +47,7 @@ export class RegisterAuthHandler {
         template: 'register',
       },
       {
-      },
-      {
-        host: '',
-        url: `${prefix}/auth/confirm.html?code=${confirm.code}`,
+        url: `${url}?code=${confirm.code}`,
       },
     );
   }

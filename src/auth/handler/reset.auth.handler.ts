@@ -27,7 +27,7 @@ export class ResetAuthHandler {
     subject: string,
     code: string,
   ): Promise<void> {
-    const prefix = this.configService.get('PREFIX');
+    const url = this.configService.get('FORM_CHANGE');
     await this.mailService.sendTemplate(
       {
         to: username,
@@ -35,10 +35,7 @@ export class ResetAuthHandler {
         template: 'reset',
       },
       {
-      },
-      {
-        host: '',
-        url: `${prefix}/auth/change.html?code=${code}`,
+        url: `${url}?code=${code}`,
       },
     );
   }

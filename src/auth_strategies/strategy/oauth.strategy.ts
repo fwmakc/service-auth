@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 import { Strategy } from 'passport-oauth2';
 import { AuthService } from '@src/auth/auth.service';
 import { AuthDto } from '@src/auth/auth.dto';
-import { UsersService } from '@src/users/users.service';
 import { AuthStrategiesService } from '@src/auth_strategies/auth_strategies.service';
 // import { OauthProvider } from '@src/auth_strategies/provider/oauth.provider';
 
@@ -17,7 +16,6 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
     private readonly configService: ConfigService,
     private readonly authService: AuthService,
     private readonly authStrategiesService: AuthStrategiesService,
-    private readonly userService: UsersService,
     // private readonly oauthProvider: OauthProvider,
   ) {
     // console.log('-- oauth/login');
@@ -101,17 +99,6 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
       // json: JSON.stringify(profile),
     });
 
-    const user = await this.userService.first(null, null, null, auth.id);
-    await this.userService.update(
-      user.id,
-      {
-        email: profile.email,
-        name: profile.name,
-        avatar: profile.avatar,
-      },
-      null,
-      auth.id,
-    );
     // console.log('-- auth', auth);
     // console.log('-- user', user);
     // console.log('-- profile', profile);

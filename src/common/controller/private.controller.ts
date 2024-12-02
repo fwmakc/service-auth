@@ -15,7 +15,7 @@ import { SearchDto } from '@src/common/dto/search.dto';
 import { ProtectedController } from '@src/common/controller/protected.controller';
 import { AuthDto } from '@src/auth/auth.dto';
 import { Auth, Self } from '@src/auth/auth.decorator';
-import { Data, Doc } from '@src/common/common.decorator';
+import { Data } from '@src/common/common.decorator';
 import { CommonEntity } from '@src/common/common.entity';
 import { CommonDto } from '@src/common/common.dto';
 
@@ -44,7 +44,6 @@ export const PrivateController = <T extends Type<unknown>>(
 
     @Auth()
     @Get('find')
-    @Doc('find', classDto)
     async find(
       @Data('where') where: object,
       @Data('order') order: object,
@@ -57,7 +56,6 @@ export const PrivateController = <T extends Type<unknown>>(
 
     @Auth()
     @Get('find/:id')
-    @Doc('findOne', classDto)
     async findOne(
       @Param('id', ParseIntPipe) id: number,
       @Data('relations') relationsDto: Array<RelationsDto>,
@@ -73,7 +71,6 @@ export const PrivateController = <T extends Type<unknown>>(
 
     @Auth()
     @Get('first')
-    @Doc('first', classDto)
     async first(
       @Data('where') where: object,
       @Data('order') order: object,
@@ -86,7 +83,6 @@ export const PrivateController = <T extends Type<unknown>>(
 
     @Auth()
     @Get('many/:ids')
-    @Doc('many', classDto)
     async many(
       @Param('ids', new ParseArrayPipe({ items: Number, separator: ',' })) ids: Array<number>,
       @Data('relations') relationsDto: Array<RelationsDto>,
@@ -102,7 +98,6 @@ export const PrivateController = <T extends Type<unknown>>(
 
     @Auth()
     @Get('self')
-    @Doc('self', classDto)
     async self(
       @Data('where') where: object,
       @Data('order') order: object,
@@ -115,7 +110,6 @@ export const PrivateController = <T extends Type<unknown>>(
 
     @Auth()
     @Get('filter')
-    @Doc('filter', classDto)
     async filter(
       @Data('where') dto: Dto,
       @Data('search') searchDto: SearchDto,

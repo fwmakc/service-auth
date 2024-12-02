@@ -16,7 +16,6 @@ import { ClosedEntity } from '@src/common/entity/closed.entity';
 import { CommonController } from '@src/common/common.controller';
 import { AuthDto } from '@src/auth/auth.dto';
 import { Auth, Self } from '@src/auth/auth.decorator';
-import { Doc } from '@src/common/common.decorator';
 
 export const ClosedController = <T extends Type<unknown>>(
   name: string,
@@ -42,7 +41,6 @@ export const ClosedController = <T extends Type<unknown>>(
 
     @Auth()
     @Post('create')
-    @Doc('create', classDto)
     async create(
       @Body('create') dto: Dto,
       @Body('relations') relationsDto: Array<RelationsDto>,
@@ -56,7 +54,6 @@ export const ClosedController = <T extends Type<unknown>>(
 
     @Auth()
     @Patch('update/:id')
-    @Doc('update', classDto)
     async update(
       @Param('id', ParseIntPipe) id: number,
       @Body('update') dto: Dto,
@@ -75,7 +72,6 @@ export const ClosedController = <T extends Type<unknown>>(
 
     @Auth()
     @Delete('remove/:id')
-    @Doc('remove', undefined)
     async remove(
       @Param('id', ParseIntPipe) id: number,
       @Self() auth: AuthDto,

@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 import { Profile, Strategy } from 'passport-google-oauth20';
 import { AuthService } from '@src/auth/auth.service';
 import { AuthDto } from '@src/auth/auth.dto';
-import { UsersService } from '@src/users/users.service';
 import { AuthStrategiesService } from '@src/auth_strategies/auth_strategies.service';
 
 @Injectable()
@@ -13,7 +12,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     private readonly configService: ConfigService,
     private readonly authService: AuthService,
     private readonly strategiesService: AuthStrategiesService,
-    private readonly userService: UsersService,
   ) {
     super({
       clientID: configService.get('GOOGLE_CLIENT_ID'),
@@ -54,20 +52,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
       accessToken,
       refreshToken,
     });
-
-    const user = await this.userService.first(null, null, null, auth.id);
-    await this.userService.update(
-      user.id,
-      {
-        email: account.email,
-        name: account.given_name,
-        lastName: account.family_name,
-        avatar: account.picture,
-        locale: account.locale,
-      },
-      null,
-      auth.id,
-    );
 
     return auth;
   }

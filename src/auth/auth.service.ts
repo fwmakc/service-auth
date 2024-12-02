@@ -10,7 +10,6 @@ import { AuthEntity } from '@src/auth/auth.entity';
 import { AuthFilter } from '@src/auth/auth.filter';
 import { CommonService } from '@src/common/common.service';
 import { RelationsDto } from '@src/common/dto/relations.dto';
-import { UsersService } from '@src/users/users.service';
 import { compare } from 'bcryptjs';
 
 @Injectable()
@@ -22,21 +21,12 @@ export class AuthService extends CommonService<
   constructor(
     @InjectRepository(AuthEntity)
     protected readonly repository: Repository<AuthEntity>,
-    protected readonly userService: UsersService,
   ) {
     super();
   }
 
   async create(authDto: AuthDto, relationsDto: Array<RelationsDto> = undefined): Promise<AuthEntity> {
-    const result = await super.create(authDto, relationsDto);
-    await this.userService.create(
-      {
-        email: result.username,
-      },
-      null,
-      result.id,
-    );
-    return result;
+    return await super.create(authDto, relationsDto);
   }
 
   async findByUsername(username: string): Promise<AuthEntity> {

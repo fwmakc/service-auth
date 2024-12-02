@@ -8,13 +8,10 @@ import {
   Res,
 } from '@nestjs/common';
 import { AuthDto } from '@src/auth/auth.dto';
-import { ApiTags } from '@nestjs/swagger';
 import { Auth } from '@src/auth/auth.decorator';
-import { CommonDoc } from '@src/common/common.doc';
 import { FormsAuthService } from '@src/auth/service/forms.auth.service';
 import { GrantsTokenDto } from '@src/token/dto/grants.token.dto';
 
-@ApiTags('Авторизация через формы')
 @Controller('auth')
 export class FormsAuthController {
   constructor(
@@ -22,22 +19,6 @@ export class FormsAuthController {
   ) {}
 
   @Post('change/:code')
-  @CommonDoc({
-    title: 'Смена пароля пользователя',
-    models: [],
-    params: [{
-      name: 'code',
-      required: true,
-      description: 'Код подтверждения',
-    }],
-      queries: [{
-      name: 'authDto',
-      required: true,
-      description: 'Объект полей регистрации',
-      type: '[AuthDto]',
-      example: [{ password: '...' }],
-    }],
-  })
   async change(
     @Body() authDto: AuthDto,
     @Param('code') code: string,
@@ -48,15 +29,6 @@ export class FormsAuthController {
   }
 
   @Get('confirm/:code')
-  @CommonDoc({
-    title: 'Подтверждение регистрации и активация учетной записи',
-    models: [],
-    params: [{
-      name: 'code',
-      required: true,
-      description: 'Код подтверждения',
-    }],
-  })
   async confirm(
     @Param('code') code: string,
     @Req() req: any,
@@ -66,32 +38,16 @@ export class FormsAuthController {
   }  
 
   @Post('login')
-  @CommonDoc({
-    title: 'Авторизация',
-    models: [],
-    queries: [{
-      name: 'authDto',
-      required: true,
-      description: 'Объект полей авторизации',
-      type: '[AuthDto]',
-      example: { username: '...', password: '...' },
-    }],
-  })
   async login(
     @Body() grantsTokenDto: GrantsTokenDto,
-    @Body('response_type') response_type: string,
     @Req() req: any,
     @Res({ passthrough: true }) res: any,
   ) {
-    return await this.formsAuthService.login(grantsTokenDto, response_type, req, res);
+    return await this.formsAuthService.login(grantsTokenDto, req, res);
   }
 
   @Auth()
   @Post('logout')
-  @CommonDoc({
-    title: 'Выход',
-    models: [],
-  })
   async logout(
     @Req() req: any,
     @Res({ passthrough: true }) res: any,
@@ -100,17 +56,6 @@ export class FormsAuthController {
   }
 
   @Post('register')
-  @CommonDoc({
-    title: 'Регистрация',
-    models: [],
-    queries: [{
-      name: 'authDto',
-      required: true,
-      description: 'Объект полей регистрации',
-      type: '[AuthDto]',
-      example: { username: '...', password: '...' },
-    }],
-  })
   async register(
     @Body() authDto: AuthDto,
     @Body('subject') subject: string,
@@ -121,17 +66,6 @@ export class FormsAuthController {
   }
 
   @Post('reset')
-  @CommonDoc({
-    title: 'Запрос на сброс пароля пользователя',
-    models: [],
-    queries: [{
-      name: 'authDto',
-      required: true,
-      description: 'Объект полей регистрации',
-      type: '[AuthDto]',
-      example: [{ username: '...' }],
-    }],
-  })
   async reset(
     @Body() authDto: AuthDto,
     @Body('subject') subject: string,

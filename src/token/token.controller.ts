@@ -1,10 +1,7 @@
 import { Body, Controller, Post, Req, Res } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { CommonDoc } from '@src/common/common.doc';
 import { GrantsTokenDto } from '@src/token/dto/grants.token.dto';
 import { GrantsTokenService } from '@src/token/service/grants.token.service';
 
-@ApiTags('Токены')
 @Controller('token')
 export class TokenController {
   constructor(
@@ -12,17 +9,6 @@ export class TokenController {
   ) {}
 
   @Post('/')
-  @CommonDoc({
-    title: 'Базовый метод получения токена',
-    models: [GrantsTokenDto],
-    queries: [{
-      name: 'grantsTokenDto',
-      required: true,
-      description: 'Объект полей запроса токена',
-      type: '[GrantsTokenDto]',
-      example: [{ grant_type: 'authorization_code', client_id: '...', redirect_uri: '...' }],
-    }],
-  })
   async token(
     @Body() grantsTokenDto: GrantsTokenDto,
     @Req() request: any,
@@ -49,13 +35,6 @@ export class TokenController {
     // password=A3ddj3w
     if (grantsTokenDto.grant_type === 'password') {
       return await this.grantsTokenService.password(grantsTokenDto, request, response);
-    }
-    // /token
-    // grant_type=person_credentials
-    // username=johndoe
-    // password=A3ddj3w
-    if (grantsTokenDto.grant_type === 'person_credentials') {
-      return await this.grantsTokenService.personCredentials(grantsTokenDto);
     }
     // /token
     // grant_type=refresh_token

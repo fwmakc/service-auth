@@ -17,10 +17,8 @@ import { GrantsTokenService } from '@src/token/service/grants.token.service';
 import { AuthorizationCodeGrant } from '@src/token/grant/authorization_code.grant';
 import { ClientCredentialsGrant } from '@src/token/grant/client_credentials.grant';
 import { PasswordGrant } from '@src/token/grant/password.grant';
-import { PersonCredentialsGrant } from '@src/token/grant/person_credentials.grant';
 import { RefreshTokenGrant } from '@src/token/grant/refresh_token.grant';
 import { AuthModule } from '@src/auth/auth.module';
-import { PersonsModule } from '@src/persons/persons.module';
 
 @Module({
   controllers: [TokenController],
@@ -33,7 +31,6 @@ import { PersonsModule } from '@src/persons/persons.module';
     }),
     forwardRef(() => ClientsModule),
     forwardRef(() => AuthModule),
-    forwardRef(() => PersonsModule),
   ],
   providers: [
     TokenService,
@@ -43,7 +40,6 @@ import { PersonsModule } from '@src/persons/persons.module';
     AuthorizationCodeGrant,
     ClientCredentialsGrant,
     PasswordGrant,
-    PersonCredentialsGrant,
     RefreshTokenGrant,
 
     OneHandler,
