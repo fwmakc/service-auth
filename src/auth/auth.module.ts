@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthEntity } from '@src/auth/auth.entity';
 import { AuthService } from '@src/auth/auth.service';
 import { AuthStrategy } from '@src/auth/auth.strategy';
-import { AuthResolver } from '@src/auth/auth.resolver';
 
 import { AuthController } from '@src/auth/auth.controller';
 import { FormsAuthController } from '@src/auth/controller/forms.auth.controller';
@@ -46,7 +45,6 @@ import { TokenModule } from '@src/token/token.module';
   providers: [
     AuthService,
     AuthStrategy,
-    AuthResolver,
     FormsAuthService,
     OpenAuthService,
 
