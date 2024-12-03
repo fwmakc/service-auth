@@ -31,7 +31,9 @@ export class FormsAuthService {
         error = e?.response;
       });
     if (!result) {
-      return await this.redirectError(error);
+      const errorPrepared = await this.prepareRedirectError(error);
+      const url = this.configService.get('FORM_CHANGE');
+      return await res.redirect(`${url}${errorPrepared}`);
     }
     const url = this.configService.get('FORM_CHANGE_COMPLETE');
     return await res.redirect(url);
@@ -47,7 +49,9 @@ export class FormsAuthService {
         error = e?.response;
       });
     if (!result) {
-      return await this.redirectError(error);
+      const errorPrepared = await this.prepareRedirectError(error);
+      const url = this.configService.get('FORM_CONFIRM');
+      return await res.redirect(`${url}${errorPrepared}`);
     }
     const url = this.configService.get('FORM_CONFIRM_COMPLETE');
     return await res.redirect(url);
@@ -64,7 +68,9 @@ export class FormsAuthService {
         error = e?.response;
       });
     if (!token) {
-      return await this.redirectError(error);
+      const errorPrepared = await this.prepareRedirectError(error);
+      const url = this.configService.get('FORM_LOGIN');
+      return await res.redirect(`${url}${errorPrepared}`);
     }
     if (!response_type) {
       return token;
@@ -83,7 +89,9 @@ export class FormsAuthService {
         error = e?.response;
       });
     if (!result) {
-      return await this.redirectError(error);
+      const errorPrepared = await this.prepareRedirectError(error);
+      const url = this.configService.get('FORM_LOGIN');
+      return await res.redirect(`${url}${errorPrepared}`);
     }
     const url = this.configService.get('FORM_LOGIN');
     return await res.redirect(url);
@@ -96,7 +104,9 @@ export class FormsAuthService {
         error = e?.response;
       });
     if (!auth) {
-      return await this.redirectError(error);
+      const errorPrepared = await this.prepareRedirectError(error);
+      const url = this.configService.get('FORM_REGISTER');
+      return await res.redirect(`${url}${errorPrepared}`);
     }
     await this.registerAuthHandler.sendMail(auth, subject);
     const url = this.configService.get('FORM_REGISTER_COMPLETE');
@@ -110,27 +120,27 @@ export class FormsAuthService {
         error = e?.response;
       });
     if (!confirm?.code) {
-      return await this.redirectError(error);
+      const errorPrepared = await this.prepareRedirectError(error);
+      const url = this.configService.get('FORM_RESET');
+      return await res.redirect(`${url}${errorPrepared}`);
     }
     await this.resetAuthHandler.sendMail(authDto.username, subject, confirm.code);
     const url = this.configService.get('FORM_RESET_COMPLETE');
     return await res.redirect(url);
   }
 
-  async redirectError(error = undefined) {
+  async prepareRedirectError(error = undefined) {
     if (!error) {
       error = {
         error: 'Bad request',
         message: 'Unknown error',
       };
     }
-
     const errorArray = [];
     for (const [key, value] of Object.entries({ ...error })) {
       errorArray.push(`${key}=${ encodeURI(`${value}`) }`);
     }
-
-    const url = this.configService.get('FORM_LOGIN');
-    return `${url}?${errorArray.join('&')}`;
+    // const url = this.configService.get('FORM_LOGIN');
+    return `?${errorArray.join('&')}`;
   }
 }
